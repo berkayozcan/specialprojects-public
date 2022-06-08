@@ -23,7 +23,7 @@ end
 function install_hawkeye()
     destination_dir = '/opt/webcam_streamer/hawkeye'
 
-    os.execute('git clone git://github.com/ipartola/hawkeye.git ' .. destination_dir)
+    os.execute('git clone https://github.com/ipartola/hawkeye ' .. destination_dir)
     os.execute('make --directory ' .. destination_dir)
     os.execute('make install --directory ' .. destination_dir)
 end
