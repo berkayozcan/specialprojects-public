@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pi Launchpad</title>
+<script>try{var t=localStorage.getItem('sp_theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---- reset ---- */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+
+  /* ---- tokens: light on :root ---- */
+  :root{
+    color-scheme:light;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+
+    --bg:#f5f1ee;
+    --dots:rgba(197,26,74,.06);
+    --surface:#ffffff;
+    --surface-2:#f1ebe6;
+    --border:#e4dcd4;
+    --border-strong:#d6ccc2;
+    --text:#1c1620;
+    --muted:#6c6470;
+    --raspberry:#c51a4a;
+    --raspberry-ink:#c51a4a;
+    --raspberry-soft:rgba(197,26,74,.10);
+    --green:#4f9c2e;
+    --green-soft:rgba(79,156,46,.14);
+    --amber:#a96a12;
+    --amber-soft:rgba(169,106,18,.13);
+    --shadow:0 1px 2px rgba(28,22,32,.06),0 10px 30px -18px rgba(28,22,32,.30);
+    --shadow-lift:0 2px 4px rgba(28,22,32,.08),0 18px 44px -20px rgba(197,26,74,.38);
+    --on-accent:#ffffff;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --bg:#131019;
+      --dots:rgba(255,91,134,.07);
+      --surface:#1c1624;
+      --surface-2:#251e30;
+      --border:#352d42;
+      --border-strong:#453b55;
+      --text:#f2edf6;
+      --muted:#a79db4;
+      --raspberry:#ff5b86;
+      --raspberry-ink:#ff5b86;
+      --raspberry-soft:rgba(255,91,134,.14);
+      --green:#7cc95a;
+      --green-soft:rgba(124,201,90,.16);
+      --amber:#f0ad4a;
+      --amber-soft:rgba(240,173,74,.16);
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -20px rgba(0,0,0,.7);
+      --shadow-lift:0 2px 4px rgba(0,0,0,.5),0 22px 52px -22px rgba(255,91,134,.45);
+      --on-accent:#1a0710;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#131019;
+    --dots:rgba(255,91,134,.07);
+    --surface:#1c1624;
+    --surface-2:#251e30;
+    --border:#352d42;
+    --border-strong:#453b55;
+    --text:#f2edf6;
+    --muted:#a79db4;
+    --raspberry:#ff5b86;
+    --raspberry-ink:#ff5b86;
+    --raspberry-soft:rgba(255,91,134,.14);
+    --green:#7cc95a;
+    --green-soft:rgba(124,201,90,.16);
+    --amber:#f0ad4a;
+    --amber-soft:rgba(240,173,74,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -20px rgba(0,0,0,.7);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.5),0 22px 52px -22px rgba(255,91,134,.45);
+    --on-accent:#1a0710;
+  }
+
+  body{
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    color:var(--text);
+    background-color:var(--bg);
+    background-image:radial-gradient(var(--dots) 1px,transparent 1.4px);
+    background-size:22px 22px;
+    background-position:-11px -11px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--raspberry);outline-offset:2px;border-radius:6px}
+
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+  /* ---- header ---- */
+  header.bar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+    background:color-mix(in srgb,var(--bg) 86%,transparent);
+    backdrop-filter:saturate(1.4) blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .bar-in{display:flex;align-items:center;gap:16px;min-height:60px;padding-block:10px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:11px;margin-right:auto}
+  .brand .berry{width:26px;height:26px;flex:none;color:var(--raspberry)}
+  .brand b{font-family:"Sora",sans-serif;font-weight:700;font-size:17px;letter-spacing:-.01em}
+  .brand b span{color:var(--muted);font-weight:500}
+
+  .host{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:5px 6px 5px 12px;box-shadow:var(--shadow)}
+  .host label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .host .scheme{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:13px}
+  .host input{border:0;background:transparent;color:var(--text);font-family:"IBM Plex Mono",monospace;font-size:13.5px;min-width:0;width:148px;padding:4px 2px}
+  .host input:focus{outline:none}
+
+  .icon-btn{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;cursor:pointer;box-shadow:var(--shadow);transition:border-color .15s,transform .15s}
+  .icon-btn:hover{border-color:var(--border-strong)}
+  .icon-btn svg{width:18px;height:18px}
+  .icon-btn .moon{display:none}
+  :root[data-theme="dark"] .icon-btn .sun{display:none}
+  :root[data-theme="dark"] .icon-btn .moon{display:block}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .icon-btn .sun{display:none}:root:not([data-theme="light"]) .icon-btn .moon{display:block}}
+
+  /* ---- hero ---- */
+  .hero{padding-block:44px 26px}
+  .hero .eyebrow{display:flex;align-items:center;gap:9px}
+  .hero .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+  .hero h1{font-family:"Sora",sans-serif;font-weight:700;letter-spacing:-.025em;line-height:1.04;font-size:clamp(2.1rem,6vw,3.4rem);margin:.5rem 0 0;text-wrap:balance;max-width:15ch}
+  .hero h1 em{font-style:normal;color:var(--raspberry)}
+  .hero p{margin:.85rem 0 0;font-size:clamp(1rem,2.4vw,1.17rem);color:var(--muted);max-width:56ch}
+  .stats{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px}
+  .stats div{display:flex;align-items:baseline;gap:8px}
+  .stats b{font-family:"Sora",sans-serif;font-weight:600;font-size:1.15rem;color:var(--text);font-variant-numeric:tabular-nums}
+  .stats span{font-size:13px;color:var(--muted)}
+
+  /* ---- filter chips ---- */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 22px;align-items:center}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:13px;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--border-strong);color:var(--text)}
+  .chip[aria-pressed="true"]{background:var(--raspberry);border-color:var(--raspberry);color:var(--on-accent);font-weight:500}
+
+  /* ---- grid ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;padding-bottom:40px}
+
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--surface);border:1px solid var(--border);border-radius:16px;
+    padding:20px;box-shadow:var(--shadow);
+    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:var(--border-strong)}
+  .card.hide{display:none}
+
+  .card-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px}
+  .glyph{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--raspberry-soft);color:var(--raspberry);border:1px solid color-mix(in srgb,var(--raspberry) 22%,transparent)}
+  .glyph svg{width:24px;height:24px}
+  .card-top .meta{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right}
+  .tag-cat{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .port{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;padding:3px 9px;border-radius:999px;background:var(--green-soft);color:var(--green);white-space:nowrap}
+  .port.none{background:var(--surface-2);color:var(--muted)}
+  .port .pulse{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+  .card h2{font-family:"Sora",sans-serif;font-weight:600;font-size:1.24rem;letter-spacing:-.01em;margin:0 0 5px}
+  .card .desc{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+
+  .tech{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+  .tech span{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:3px 8px}
+
+  .cmd{display:flex;align-items:center;gap:8px;margin-top:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 9px 9px 12px}
+  .cmd .lead{color:var(--raspberry);font-family:"IBM Plex Mono",monospace;font-size:13px;flex:none}
+  .cmd code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--text);overflow-x:auto;white-space:nowrap;flex:1;scrollbar-width:thin}
+  .cmd code::-webkit-scrollbar{height:5px}
+  .copy{flex:none;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:7px;padding:5px 8px;font-family:"IBM Plex Mono",monospace;font-size:11px;cursor:pointer;transition:all .15s}
+  .copy:hover{color:var(--text);border-color:var(--border-strong)}
+  .copy.done{color:var(--green);border-color:var(--green)}
+  .copy svg{width:13px;height:13px}
+
+  details.more{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
+  details.more>summary{cursor:pointer;list-style:none;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  details.more>summary::-webkit-details-marker{display:none}
+  details.more>summary .chev{transition:transform .2s}
+  details.more[open]>summary .chev{transform:rotate(90deg)}
+  details.more .body{margin-top:11px;display:flex;flex-direction:column;gap:10px}
+  .kv{font-size:13px;color:var(--muted)}
+  .kv b{color:var(--text);font-weight:600;font-family:"IBM Plex Mono",monospace;font-size:12px;display:block;margin-bottom:3px;letter-spacing:.04em}
+  .kv .run{display:block;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+  .caution{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;line-height:1.5;color:var(--text);background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);border-radius:9px;padding:9px 11px}
+  .caution svg{width:15px;height:15px;flex:none;color:var(--amber);margin-top:1px}
+
+  .actions{margin-top:auto;padding-top:16px;display:flex;gap:9px;align-items:center}
+  .btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:"Sora",sans-serif;font-weight:600;font-size:13.5px;padding:10px 14px;border-radius:10px;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:all .15s}
+  .btn.primary{background:var(--raspberry);color:var(--on-accent);box-shadow:0 6px 16px -8px var(--raspberry)}
+  .btn.primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn.ghost{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+  .btn.ghost:hover{border-color:var(--raspberry);color:var(--raspberry)}
+  .btn svg{width:15px;height:15px}
+
+  /* ---- footer ---- */
+  footer{border-top:1px solid var(--border);padding-block:26px 40px;color:var(--muted);font-size:13px}
+  footer .fin{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+  footer .fin a{color:var(--raspberry);text-decoration:none;font-weight:500}
+  footer .fin a:hover{text-decoration:underline}
+  footer .note{margin-top:14px;font-size:12.5px;line-height:1.6;max-width:70ch}
+  footer code{font-family:"IBM Plex Mono",monospace;background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:12px;color:var(--text)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media (max-width:520px){
+    .brand{margin-right:0;width:100%}
+    .host input{width:110px}
+    .hero{padding-block:30px 20px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <div class="brand">
+      <svg class="berry" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 22c-3.6 0-6.5-2.6-6.5-6 0-2 1-3.6 2.6-4.6C7.2 10.6 7 9.6 7.3 8.6 8 6.4 10 5.5 12 5.5s4 .9 4.7 3.1c.3 1 .1 2-.8 2.8 1.6 1 2.6 2.6 2.6 4.6 0 3.4-2.9 6-6.5 6Z" fill="currentColor" opacity=".9"/>
+        <path d="M12 5.5C12 3.6 10.5 2 8.5 2c.4 1.9 1.8 3.3 3.5 3.5Zm0 0C12 3.6 13.5 2 15.5 2c-.4 1.9-1.8 3.3-3.5 3.5Z" fill="currentColor"/>
+        <circle cx="9.7" cy="14" r="1.05" fill="var(--surface)"/><circle cx="14.3" cy="14" r="1.05" fill="var(--surface)"/><circle cx="12" cy="17.4" r="1.05" fill="var(--surface)"/>
+      </svg>
+      <b>Pi&nbsp;Launchpad<span> / specialprojects</span></b>
+    </div>
+
+    <div class="host" title="Your Pi's address — used by the Open buttons">
+      <label for="host">Device</label>
+      <span class="scheme">http://</span>
+      <input id="host" spellcheck="false" autocomplete="off" placeholder="raspberrypi.local">
+    </div>
+
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span> Raspberry&nbsp;Pi · self-hosted toolkit</div>
+    <h1>Turn a spare Pi into a <em>home server</em> you actually use.</h1>
+    <p>Five small projects — one command installs each, then they serve straight to your browser or your phone. Set your Pi's address once and launch them from here.</p>
+    <div class="stats">
+      <div><b>5</b><span>projects</span></div>
+      <div><b>1</b><span>command each</span></div>
+      <div><b>:80</b><span>served locally</span></div>
+      <div><b>0</b><span>cloud accounts required</span></div>
+    </div>
+  </section>
+
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button class="chip" data-filter="all" aria-pressed="true">All</button>
+    <button class="chip" data-filter="web" aria-pressed="false">Web UI</button>
+    <button class="chip" data-filter="terminal" aria-pressed="false">Terminal</button>
+    <button class="chip" data-filter="fleet" aria-pressed="false">Fleet</button>
+  </div>
+
+  <section class="grid" id="grid" aria-live="polite"></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fin">
+      <span>Public domain · Unlicense</span>
+      <a href="https://github.com/berkayozcan/specialprojects-public" target="_blank" rel="noopener">github.com/berkayozcan/specialprojects-public</a>
+    </div>
+    <p class="note">Each service binds to port <code>80</code>, so run one web project at a time — or give each its own Pi. On the public internet, reach them through your Dataplicity wormhole or a reverse proxy with TLS rather than opening the port directly.</p>
+  </div>
+</footer>
+
+<textarea id="clip" style="position:fixed;left:-9999px;top:0;opacity:0" aria-hidden="true" tabindex="-1"></textarea>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---- icons ----
+  var I = {
+    desktop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg>',
+    cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.2l6-3.2v10l-6-3.2"/><circle cx="8" cy="12" r="2.4"/></svg>',
+    folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4l2 2.2h7A1.5 1.5 0 0 1 19 8.7"/><path d="M3 8h16.6a1.5 1.5 0 0 1 1.48 1.76l-1.2 7A1.5 1.5 0 0 1 18.4 18H4.5A1.5 1.5 0 0 1 3 16.5Z"/></svg>',
+    chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 20 17H9l-4.5 3.5V17H4a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 4 5Z"/><path d="M7.5 9.5l2.2 2-2.2 2M12 13.8h3.4"/></svg>',
+    fleet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="7" height="7" rx="1.6"/><rect x="14" y="3.5" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/><path d="M10 7h4M7 10.5v3.5M17 10.5v3.5"/></svg>'
+  };
+  var copyIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
+  var openIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+  var linkIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a4 4 0 0 0 5.7.4l2.5-2.5a4 4 0 1 0-5.7-5.7l-1.3 1.3"/><path d="M14 11a4 4 0 0 0-5.7-.4L5.8 13a4 4 0 1 0 5.7 5.7l1.3-1.3"/></svg>';
+  var warnIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 22 20H2Z"/><path d="M12 9.5v4.5M12 17h.01"/></svg>';
+
+  // ---- data (facts pulled straight from each branch's installer) ----
+  var PROJECTS = [
+    {
+      id:'remote-desktop', icon:'desktop', name:'Remote Desktop', cat:'web', catLabel:'Access',
+      desc:'A full graphical desktop in your browser. TightVNC renders the screen, noVNC streams it over WebSockets — nothing to install on the viewing device.',
+      tech:['TightVNC','noVNC','websockify'], port:80,
+      install:'sudo lua install_remotedesktop.lua',
+      start:'sudo /opt/remote_desktop/start',
+      extra:'VNC display :1 · 1920×1080 · noVNC on :80 → :5901',
+      action:{type:'open'},
+      caution:'noVNC serves in the clear on port 80. Keep it on your LAN or behind the wormhole — not the open internet.'
+    },
+    {
+      id:'webcam-streamer', icon:'cam', name:'Webcam Streamer', cat:'web', catLabel:'Media',
+      desc:'A live MJPEG feed from a USB camera. Hawkeye reads /dev/video0 and pushes 640×480 at 15 fps straight to any browser tab.',
+      tech:['Hawkeye','MJPEG','V4L2'], port:80,
+      install:'sudo lua install_webcamstreamer.lua',
+      start:'sudo /opt/webcam_streamer/start',
+      extra:'Device /dev/video0 · 640×480 · 15 fps · quality 80',
+      action:{type:'open'},
+      caution:'The stream is unauthenticated by default. Set auth + SSL in /opt/webcam_streamer/conf before exposing it.'
+    },
+    {
+      id:'file-browser', icon:'folder', name:'File Browser', cat:'web', catLabel:'Files',
+      desc:'A tidy web UI over the whole filesystem — upload, download, rename, and share files from your laptop or phone without SSH.',
+      tech:['Filebrowser','Go'], port:80,
+      install:'sudo lua install_filebrowser.lua',
+      start:'sudo /opt/file_browser/start',
+      extra:'Single Go binary · serves the Pi root on :80',
+      action:{type:'open'},
+      caution:'Filebrowser ships with admin / admin. Change the login the first time you open it.'
+    },
+    {
+      id:'fbpi', icon:'chat', name:'Facebook Terminal', cat:'terminal', catLabel:'Terminal',
+      desc:'Run shell commands on the Pi from Facebook Messenger. Message a webhook-connected page — send term &lt;cmd&gt;, date, time or help — and replies come back in chat.',
+      tech:['Python','Flask','Messenger'], port:80,
+      install:'git clone -b fbpi https://github.com/berkayozcan/specialprojects-public.git',
+      start:'sudo python server.py <password>',
+      extra:'Flask webhook on 0.0.0.0:80 · commands: term · date · time · help',
+      action:{type:'link', href:'https://developers.facebook.com/docs/messenger-platform/', label:'Messenger setup'},
+      caution:'Whoever knows the password gets a shell on your Pi. Pick a long one and rotate it.'
+    },
+    {
+      id:'mass-install', icon:'fleet', name:'Mass Install', cat:'fleet', catLabel:'Fleet',
+      desc:'Provision a shelf of Pis at once. An if-up.d hook names each board by its CPU serial, installs Dataplicity on first boot, then deletes itself.',
+      tech:['Dataplicity','shell','if-up.d'], port:null,
+      install:'sudo cp mass-install-dp /etc/network/if-up.d/ && sudo chmod +x /etc/network/if-up.d/mass-install-dp',
+      start:'runs automatically on next network up',
+      extra:'Sets hostname from /proc/cpuinfo serial · waits up to 30s for network',
+      action:{type:'link', href:'https://www.dataplicity.com/', label:'Dataplicity'},
+      caution:'Set ACCT_ID inside mass-install-dp before you deploy it.'
+    }
+  ];
+
+  // ---- helpers ----
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return v===undefined?null:undefined;}}
+
+  // ---- host address ----
+  var hostInput=document.getElementById('host');
+  var savedHost=store('sp_host');
+  if(savedHost){hostInput.value=savedHost;}
+  function currentHost(){
+    var v=(hostInput.value||hostInput.placeholder||'raspberrypi.local').trim();
+    v=v.replace(/^https?:\/\//i,'').replace(/\/+$/,'');
+    return v;
+  }
+  function refreshLinks(){
+    var url='http://'+currentHost();
+    document.querySelectorAll('a[data-open]').forEach(function(a){a.href=url;});
+  }
+  hostInput.addEventListener('input',function(){store('sp_host',hostInput.value.trim());refreshLinks();});
+
+  // ---- render ----
+  var grid=document.getElementById('grid');
+  PROJECTS.forEach(function(p){
+    var card=document.createElement('article');
+    card.className='card';
+    card.setAttribute('data-cat',p.cat);
+
+    var portHtml=p.port
+      ? '<span class="port"><span class="pulse"></span>port '+p.port+'</span>'
+      : '<span class="port none">no port</span>';
+
+    var action=p.action.type==='open'
+      ? '<a class="btn primary" data-open href="http://'+esc(currentHost())+'" target="_blank" rel="noopener">Open '+openIcon+'</a>'
+      : '<a class="btn ghost" href="'+esc(p.action.href)+'" target="_blank" rel="noopener">'+linkIcon+esc(p.action.label)+'</a>';
+
+    card.innerHTML=
+      '<div class="card-top">'+
+        '<div class="glyph">'+I[p.icon]+'</div>'+
+        '<div class="meta"><span class="tag-cat">'+esc(p.catLabel)+'</span>'+portHtml+'</div>'+
+      '</div>'+
+      '<h2>'+esc(p.name)+'</h2>'+
+      '<p class="desc">'+p.desc+'</p>'+
+      '<div class="tech">'+p.tech.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'+
+      '<div class="cmd"><span class="lead">$</span><code>'+esc(p.install)+'</code>'+
+        '<button class="copy" type="button" data-copy="'+esc(p.install)+'">'+copyIcon+'<span>copy</span></button>'+
+      '</div>'+
+      '<details class="more">'+
+        '<summary><span class="chev">'+
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'+
+        '</span>Run &amp; notes</summary>'+
+        '<div class="body">'+
+          '<div class="kv"><b>START</b><span class="run">'+esc(p.start)+'</span></div>'+
+          '<div class="kv" style="font-family:\'IBM Plex Mono\',monospace;font-size:11.5px;letter-spacing:.02em">'+esc(p.extra)+'</div>'+
+          (p.caution?'<div class="caution">'+warnIcon+'<span>'+esc(p.caution)+'</span></div>':'')+
+        '</div>'+
+      '</details>'+
+      '<div class="actions">'+action+'</div>';
+
+    grid.appendChild(card);
+  });
+  refreshLinks();
+
+  // ---- copy ----
+  var clip=document.getElementById('clip');
+  grid.addEventListener('click',function(e){
+    var btn=e.target.closest('.copy');
+    if(!btn)return;
+    var text=btn.getAttribute('data-copy');
+    var done=function(){
+      btn.classList.add('done');
+      var lbl=btn.querySelector('span');var old=lbl.textContent;lbl.textContent='copied';
+      setTimeout(function(){btn.classList.remove('done');lbl.textContent=old;},1500);
+    };
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done,function(){fallback(text,done);});
+    }else{fallback(text,done);}
+  });
+  function fallback(text,ok){
+    clip.value=text;clip.focus();clip.select();
+    try{document.execCommand('copy');ok();}catch(e){}
+    clip.blur();
+  }
+
+  // ---- filters ----
+  var chips=[].slice.call(document.querySelectorAll('.chip'));
+  chips.forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var f=chip.getAttribute('data-filter');
+      chips.forEach(function(c){c.setAttribute('aria-pressed',c===chip?'true':'false');});
+      document.querySelectorAll('.card').forEach(function(card){
+        var show=f==='all'||card.getAttribute('data-cat')===f;
+        card.classList.toggle('hide',!show);
+      });
+    });
+  });
+
+  // ---- theme toggle ----
+  document.getElementById('theme').addEventListener('click',function(){
+    var root=document.documentElement;
+    var cur=root.getAttribute('data-theme');
+    var next;
+    if(cur){next=cur==='dark'?'light':'dark';}
+    else{next=matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark';}
+    root.setAttribute('data-theme',next);
+    store('sp_theme',next);
+  });
+})();
+</script>
+</body>
+</html>
