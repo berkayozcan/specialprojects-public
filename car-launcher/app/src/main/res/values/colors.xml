@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Night-friendly base. The launcher commits to a dark look so a bright screen
+         never glares back at the driver after dark. -->
+    <color name="bg_top">#0F1A2B</color>
+    <color name="bg_bottom">#060A12</color>
+    <color name="surface">#172234</color>
+    <color name="surface_variant">#223049</color>
+    <color name="on_surface">#EAF1FB</color>
+    <color name="on_surface_muted">#93A2BC</color>
+    <color name="on_tile_icon">#0A1120</color>
+
+    <color name="accent">#49D6C4</color>
+
+    <!-- Per-tile accents, chosen to stay apart at a glance. -->
+    <color name="tile_nav">#4F9CF9</color>
+    <color name="tile_music">#B98BFF</color>
+    <color name="tile_phone">#52D98C</color>
+    <color name="tile_radio">#FFB24C</color>
+    <color name="tile_bt">#49B6F9</color>
+    <color name="tile_camera">#FF6B6B</color>
+    <color name="tile_apps">#36D6C3</color>
+    <color name="tile_settings">#9AA7BD</color>
+
+    <color name="launcher_bg">#0F1A2B</color>
+</resources>

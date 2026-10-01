@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Seyir</string>
+
+    <string name="nav">Navigasyon</string>
+    <string name="music">Müzik</string>
+    <string name="phone">Telefon</string>
+    <string name="radio">Radyo</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="camera">Kamera</string>
+    <string name="apps">Uygulamalar</string>
+    <string name="settings">Ayarlar</string>
+
+    <string name="greeting">İyi yolculuklar</string>
+    <string name="set_default">Varsayılan yap</string>
+    <string name="no_app">Uygun uygulama bulunamadı</string>
+
+    <string name="drawer_title">Uygulamalar</string>
+    <string name="back">Geri</string>
+
+    <string name="clock_time_format">HH:mm</string>
+    <string name="clock_date_format">EEEE, d MMMM</string>
+</resources>

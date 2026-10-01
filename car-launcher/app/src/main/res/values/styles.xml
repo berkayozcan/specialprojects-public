@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Tile">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">@dimen/tile_margin</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="cardCornerRadius">@dimen/tile_corner</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="cardElevation">0dp</item>
+        <item name="rippleColor">@color/surface_variant</item>
+    </style>
+
+    <style name="TileInner">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="TileIcon">
+        <item name="android:layout_width">@dimen/tile_icon_circle</item>
+        <item name="android:layout_height">@dimen/tile_icon_circle</item>
+        <item name="android:background">@drawable/circle</item>
+        <item name="android:padding">@dimen/tile_icon_padding</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">@color/on_tile_icon</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="TileLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textSize">@dimen/tile_label_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>

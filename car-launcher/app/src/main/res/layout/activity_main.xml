@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/screen_padding"
+    android:paddingVertical="22dp">
+
+    <!-- ===== top bar ===== -->
+    <TextClock
+        android:id="@+id/clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="HH:mm"
+        android:format24Hour="HH:mm"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/on_surface"
+        android:textSize="@dimen/clock_size"
+        android:letterSpacing="-0.02"
+        android:includeFontPadding="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextClock
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:format12Hour="EEEE, d MMMM"
+        android:format24Hour="EEEE, d MMMM"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/on_surface_muted"
+        android:textSize="@dimen/date_size"
+        app:layout_constraintStart_toStartOf="@id/clock"
+        app:layout_constraintTop_toBottomOf="@id/clock" />
+
+    <TextView
+        android:id="@+id/greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/greeting"
+        android:textColor="@color/on_surface_muted"
+        android:textSize="@dimen/greeting_size"
+        app:layout_constraintBottom_toBottomOf="@id/clock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/clock" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDefault"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/set_default"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/greeting"
+        tools:ignore="UnusedAttribute"
+        xmlns:tools="http://schemas.android.com/tools" />
+
+    <!-- ===== tile grid ===== -->
+    <LinearLayout
+        android:id="@+id/tiles"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="22dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date">
+
+        <!-- row 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_navigation"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_nav"
+                        android:src="@drawable/ic_navigation" />
+                    <TextView style="@style/TileLabel" android:text="@string/nav" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_music"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_music"
+                        android:src="@drawable/ic_music" />
+                    <TextView style="@style/TileLabel" android:text="@string/music" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_phone"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_phone"
+                        android:src="@drawable/ic_phone" />
+                    <TextView style="@style/TileLabel" android:text="@string/phone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_radio"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_radio"
+                        android:src="@drawable/ic_radio" />
+                    <TextView style="@style/TileLabel" android:text="@string/radio" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- row 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_bluetooth"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_bt"
+                        android:src="@drawable/ic_bluetooth" />
+                    <TextView style="@style/TileLabel" android:text="@string/bluetooth" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_camera"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_camera"
+                        android:src="@drawable/ic_camera" />
+                    <TextView style="@style/TileLabel" android:text="@string/camera" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_apps"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_apps"
+                        android:src="@drawable/ic_apps" />
+                    <TextView style="@style/TileLabel" android:text="@string/apps" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tile_settings"
+                style="@style/Tile"
+                android:layout_weight="1">
+                <LinearLayout style="@style/TileInner">
+                    <ImageView
+                        style="@style/TileIcon"
+                        android:backgroundTint="@color/tile_settings"
+                        android:src="@drawable/ic_settings" />
+                    <TextView style="@style/TileLabel" android:text="@string/settings" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

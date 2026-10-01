@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_padding">28dp</dimen>
+
+    <dimen name="clock_size">68sp</dimen>
+    <dimen name="date_size">20sp</dimen>
+    <dimen name="greeting_size">18sp</dimen>
+
+    <dimen name="tile_corner">28dp</dimen>
+    <dimen name="tile_margin">9dp</dimen>
+    <dimen name="tile_icon_circle">66dp</dimen>
+    <dimen name="tile_icon_padding">17dp</dimen>
+    <dimen name="tile_label_size">19sp</dimen>
+
+    <dimen name="app_icon">56dp</dimen>
+    <dimen name="app_label_size">13sp</dimen>
+</resources>
